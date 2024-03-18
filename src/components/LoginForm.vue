@@ -1,59 +1,71 @@
 <!-- src/components/LoginForm.vue -->
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-gray-100">
-      <div class="w-full max-w-xs">
-        <form @submit.prevent="handleLogin" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
-              Email
-            </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email" v-model="credentials.email">
-            <p class="text-red-500 text-xs italic" v-if="errors.email">{{ errors.email }}</p>
-          </div>
-          <div class="mb-6">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-              Password
-            </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password" v-model="credentials.password">
-            <p class="text-red-500 text-xs italic" v-if="errors.password">{{ errors.password }}</p>
-          </div>
-          <div class="flex items-center justify-between">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-              Sign In
-            </button>
-          </div>
-          <p class="text-red-500 text-xs italic mt-4" v-if="errors.non_field_errors">{{ errors.non_field_errors }}</p>
-        </form>
+    <form @submit.prevent="handleLogin" class="space-y-6">
+      <div>
+        <label class="block text-sm font-bold text-gray-700 mb-2" for="email">
+          Email
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email" v-model="loginData.email">
       </div>
-    </div>
-  </template>
+      <div>
+        <label class="block text-sm font-bold text-gray-700 mb-2" for="password">
+          Password
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password" v-model="loginData.password">
+      </div>
+      <div>
+        <button class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+          Sign In
+        </button>
+      </div>
+    </form>
+</template>
   
-  <script>
-  import { ref } from 'vue';
-  import { useAuth } from '@/composables/useAuth';
-  
-  export default {
-    setup() {
-      const { login, errors } = useAuth();
-      const credentials = ref({
+<script>
+import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuth } from '@/composables/useAuth'; // Import your useAuth composable
+
+export default {
+  setup() {
+    const router = useRouter(); // Use useRouter to redirect after login
+    const { login } = useAuth(); // Destructure the login method from useAuth
+    
+    const loginData = ref({
         email: '',
         password: '',
       });
-  
+      const errors = reactive({
+        email: null,
+        password: null,
+        non_field_errors: null,
+      });
+
       const handleLogin = async () => {
-        await login(credentials.value.email, credentials.value.password);
-      };
+        const result = await login(loginData.value);
+        if (result && !result.error) {
+          // No error, login successful
   
-      return {
-        credentials,
+          console.log('Login successful:', result.data); // Log the successful login data
+  
+          // Now you can redirect the user to the login page
+          router.push({ name: 'login' });
+        } else if (result && result.error) {
+            console.log(result);
+          // Handle the errors from login
+          Object.assign(errors, result.error);
+        }
+      };
+
+    return {
+        loginData,
         errors,
         handleLogin,
-      };
-    },
-  };
-  </script>
-  
-  <style scoped>
-  /* Tailwind CSS is utility-first, most styling is achieved through class attributes. Add any additional styles here if needed. */
-  </style>
-  
+    };
+  },
+};
+</script>
+
+<style scoped>
+/* Tailwind CSS is utility-first, most styling is achieved through class attributes. Add any additional styles here if needed. */
+</style>
