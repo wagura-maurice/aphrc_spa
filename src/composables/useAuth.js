@@ -8,16 +8,16 @@ export function useAuth() {
     const isAuthenticated = computed(() => store.getters.isAuthenticated);
     const user = computed(() => store.getters.getUser);
 
-    const login = async (email, password) => {
-        await store.dispatch('login', { email, password });
+    const login = async (loginData) => {
+        await store.dispatch('login', loginData);
     };
 
     const logout = async () => {
         await store.dispatch('logout');
     };
 
-    const register = async (userData) => {
-        await store.dispatch('register', userData);
+    const register = async (registrationData) => {
+        await store.dispatch('register', registrationData);
     };
 
     const requestPasswordReset = async (email) => {
