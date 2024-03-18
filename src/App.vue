@@ -1,27 +1,38 @@
 <!-- src/App.vue -->
+
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <!-- Navigation Bar: Update or remove according to your app's design -->
+    <nav-bar></nav-bar>
+
+    <!-- Main Content: Vue Router will render the matched component here -->
+    <router-view></router-view>
+
+    <!-- Footer: Update or remove according to your app's design -->
+    <app-footer></app-footer>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// Import your global components here
+import NavBar from './components/NavBar.vue';
+import AppFooter from './components/AppFooter.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    NavBar, // Ensure you have a NavBar component or remove this line
+    AppFooter // Ensure you have an AppFooter component or remove this line
   }
 }
 </script>
 
 <style>
+/* Global styles */
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  /* Example style: */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 </style>
