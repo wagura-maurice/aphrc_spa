@@ -1,24 +1,16 @@
 // src/composables/useBlogPost.js
-import { ref } from 'vue';
-import { fetchBlogPostById } from '@/api/index.js';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 export function useBlogPost() {
-  const post = ref(null);
-  const loading = ref(false);
-  const error = ref(null);
+  const store = useStore();
+
+  const post = computed(() => store.state.currentPost);
+  const loading = computed(() => store.state.postLoading);
+  const error = computed(() => store.state.postError);
 
   const fetchPost = async (postId) => {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await fetchBlogPostById(postId);
-      post.value = response.data;
-    } catch (e) {
-      error.value = e;
-      console.error("Failed to fetch the blog post:", e);
-    } finally {
-      loading.value = false;
-    }
+    await store.dispatch('fetchPost', postId);
   };
 
   return { post, loading, error, fetchPost };

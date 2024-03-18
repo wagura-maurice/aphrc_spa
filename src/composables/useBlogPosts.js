@@ -1,22 +1,17 @@
 // src/composables/useBlogPosts.js
-import { ref } from 'vue';
-import { fetchBlogPosts } from '@/api/index.js';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 export function useBlogPosts() {
-  const posts = ref({...});
-  const loading = ref(false);
-  const error = ref(null);
+  const store = useStore();
+
+  // Use Vuex state and getters instead of local refs
+  const posts = computed(() => store.getters.blogPosts);
+  const loading = computed(() => store.getters.postsLoading);
+  const error = computed(() => store.getters.postsError);
 
   const fetchPosts = async (pageUrl = null) => {
-    loading.value = true;
-    try {
-      const response = await fetchBlogPosts(pageUrl);
-      posts.value = response.data;
-    } catch (e) {
-      error.value = e;
-    } finally {
-      loading.value = false;
-    }
+    await store.dispatch('fetchBlogPosts', pageUrl);
   };
 
   return { posts, loading, error, fetchPosts };
