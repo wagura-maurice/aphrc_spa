@@ -1,7 +1,5 @@
 // src/router/index.js
-
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 // Import the components used in routes
 import Home from '@/views/Home.vue';
@@ -11,8 +9,7 @@ import Profile from '@/views/Profile.vue';
 import BlogDetail from '@/views/BlogDetail.vue';
 import CreateBlog from '@/views/CreateBlog.vue';
 import PasswordReset from '@/views/PasswordReset.vue';
-
-Vue.use(Router);
+import About from '@/views/About.vue';
 
 const routes = [
   {
@@ -51,38 +48,32 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/edit-blog/:id',
-    name: 'editBlog',
-    component: CreateBlog,
-    props: true,
-    meta: { requiresAuth: true },
-  },
-  {
     path: '/password-reset',
     name: 'passwordReset',
     component: PasswordReset,
     meta: { guestOnly: true },
-  }
-  // Add other routes here as needed
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: About,
+  },
 ];
 
-const router = new Router({
-  mode: 'history', // Use the HTML5 history mode
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(process.env.API_URL),
   routes,
 });
 
-// Navigation guards could be added here if needed
 router.beforeEach((to, from, next) => {
-  // Example guard for auth-required routes
-  const isAuthenticated = !!localStorage.getItem('userToken'); // Update based on your auth logic
+  const isAuthenticated = !!localStorage.getItem('userToken'); // Adjust as needed
 
-  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+  if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login');
-  } else if (to.matched.some(record => record.meta.guestOnly) && isAuthenticated) {
+  } else if (to.meta.guestOnly && isAuthenticated) {
     next('/');
   } else {
-    next(); // Always call next()!
+    next();
   }
 });
 
