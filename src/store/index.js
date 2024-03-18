@@ -45,16 +45,21 @@ export default createStore({
         }
     },
     actions: {
-        async login({ dispatch }, { email, password }) {
+        async login(_, loginData) {
+            const response = await apiClient.post('auth/sign-in/', loginData);
+
+            console.log(response.data);
+        },
+        /* async login({ dispatch }, { email, password }) {
             const response = await apiClient.post('auth/sign-in/', { email, password });
             dispatch('setTokens', { accessToken: response.data.access, refreshToken: response.data.refresh });
             dispatch('setUser', response.data.user);
-        },
+        }, */
         async logout({ dispatch }) {
             dispatch('clearAuthData');
         },
-        async register(_, userData) {
-            await apiClient.post('auth/sign-up/', userData);
+        async register(_, registrationData) {
+            await apiClient.post('auth/sign-up/', registrationData);
         },
         async requestPasswordReset(_, email) {
             await apiClient.post('auth/password-reset/', { email });
