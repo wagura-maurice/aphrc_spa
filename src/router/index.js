@@ -61,7 +61,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.API_URL),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
@@ -69,12 +69,19 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = !!localStorage.getItem('userToken'); // Adjust as needed
 
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/login');
+    next({ name: 'login' });
   } else if (to.meta.guestOnly && isAuthenticated) {
-    next('/');
+    next({ name: 'home' });
   } else {
     next();
   }
 });
+
+export function logout() {
+  localStorage.removeItem('userToken'); // Remove user token from local storage
+  // Optionally perform other cleanup actions, like clearing the user state
+
+  router.push({ name: 'login' }); // Redirect the user to the login page
+}
 
 export default router;
