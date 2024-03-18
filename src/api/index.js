@@ -4,7 +4,7 @@ import router from '../router';
 
 const API_BASE_URL = 'http://localhost:8000/api/';
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE_URL, // process.env.API_URL,
   headers: {
     'Content-Type': 'application/json',
   }
@@ -55,16 +55,6 @@ apiClient.interceptors.response.use(undefined, async (error) => {
   }
   return Promise.reject(error);
 });
-
-// Define a function for fetching blog posts
-export const fetchBlogPosts = (pageUrl = 'post/catalogs/') => {
-  // Adjusted to concatenate with the base URL inside the function
-  return apiClient.get(`${API_BASE_URL}${pageUrl}`);
-};
-
-export const fetchBlogPostById = (postId) => {
-  return apiClient.get(`${API_BASE_URL}/post/catalogs/${postId}/show/`);
-};
 
 
 export default apiClient;
