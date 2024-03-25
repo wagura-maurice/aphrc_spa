@@ -3,6 +3,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import store from './store'; // Assuming you're using Vuex
 import router from './router'; // Assuming you're using Vue Router
+import '@fortawesome/fontawesome-free/css/all.css';
 import './assets/styles/tailwind.css';
 
 const app = createApp(App);
