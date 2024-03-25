@@ -1,29 +1,43 @@
 <!-- src/views/Register.vue -->
 <template>
-    <div class="max-w-lg mx-auto mt-8 p-4 bg-white rounded shadow-lg">
-      <h2 class="text-2xl font-semibold mb-4">Register</h2>
-      <RegistrationForm @register="handleRegister" />
+    <div class="min-h-screen bg-gray-100 flex flex-col justify-center">
+    <div class="max-w-md w-full mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gray-900">Register</h2>
+        <div class="bg-white p-8 mt-6 mb-4 rounded-lg shadow-md">
+            <RegistrationForm @register="handleRegister" />
+        </div>
     </div>
-  </template>
+    </div>
+</template>
   
-  <script>
-  import RegistrationForm from '@/components/RegistrationForm.vue';
-  
-  export default {
-    name: 'RegisterPage',
-    components: {
-      RegistrationForm,
-    },
-    methods: {
-      handleRegister() {
-        // Handle registration completion, such as redirecting to login page
-        console.log('Registration completed.');
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  /* Additional scoped styles if needed */
-  </style>
+<script>
+import { useRouter } from 'vue-router';
+import RegistrationForm from '@/components/RegistrationForm.vue';
 
+export default {
+  name: 'RegisterPage',
+  components: {
+    RegistrationForm,
+  },
+  setup() {
+    const router = useRouter();
+    
+    const handleRegister = async () => {
+      // Perform registration logic...
+      
+      // If registration is successful
+      router.push({ name: 'login' }); // or router.push('/login');
+    };
+    
+    return {
+      handleRegister
+    };
+  },
+};
+</script>
+  
+<style scoped>
+    /* Additional scoped styles if needed */
+</style>
+
+direct them to login page on succufu registration

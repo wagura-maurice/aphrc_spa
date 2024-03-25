@@ -4,22 +4,35 @@
       <div class="max-w-md w-full mx-auto">
         <h2 class="text-3xl font-bold text-center text-gray-900">Login</h2>
         <div class="bg-white p-8 mt-6 mb-4 rounded-lg shadow-md">
-          <!-- Use the LoginForm component -->
-          <login-form></login-form>
+            <LoginForm @onLogin="handleLogin" />
         </div>
       </div>
     </div>
 </template>
 
 <script>
-// Import the LoginForm component
+import { useRouter } from 'vue-router';
 import LoginForm from '@/components/LoginForm.vue';
 
 export default {
-    name: 'LoginPage',
-    components: {
-        LoginForm,
-    },
+  name: 'RegisterPage',
+  components: {
+    LoginForm,
+  },
+  setup() {
+    const router = useRouter();
+    
+    const handleLogin = async () => {
+      // Perform registration logic...
+      
+      // If registration is successful
+      router.push({ name: 'createBlog' });
+    };
+    
+    return {
+      handleLogin
+    };
+  },
 };
 </script>
 
